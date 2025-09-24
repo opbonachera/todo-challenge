@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app   # <-- mount local code inside the container
+      - ./db.sqlite3:/app/db.sqlite3  # persistencia de la base de datos
+    command: >
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
