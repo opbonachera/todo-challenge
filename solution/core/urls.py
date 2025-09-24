@@ -1,6 +1,8 @@
 from django.urls import path, include
 
+API_VERSION = 'v1'
+
 urlpatterns = [
-    path('', include('task.urls')),
-    path('', include('authentication.urls')),# Check why naming it auth is not allowed
+    path(f'api/{API_VERSION}/', include('task.urls')),
+    path(f'api/{API_VERSION}/auth/', include('authentication.urls')),
 ]
