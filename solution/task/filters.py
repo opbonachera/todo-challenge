@@ -1,4 +1,3 @@
-
 import django_filters
 from .models import Task
 from django.db.models import Q
@@ -16,6 +15,8 @@ class TaskFilter(django_filters.FilterSet):
             'title': ['icontains', 'exact', 'startswith', 'endswith'],
             'description': ['icontains', 'exact', 'startswith', 'endswith'],
             'created_at': ['gte', 'lte'],
+            'updated_at': ['gte', 'lte'],
+            'user': ['exact'],
         }
 
     def filter_text(self, queryset, name, value):
