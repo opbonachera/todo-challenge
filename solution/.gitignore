@@ -1,6 +1,6 @@
 notas.txt
 *.env
-*/__pycache__/
 *.pyc
+*/__pycache__/
 db.sqlite3
 logs/
