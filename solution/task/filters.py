@@ -8,7 +8,8 @@ class TaskFilter(django_filters.FilterSet):
     date_to = django_filters.DateFilter(field_name='created_at', lookup_expr='lte', label='Created to')
     created_by = django_filters.CharFilter(field_name='created_by__username', lookup_expr='exact')
     completed = django_filters.BooleanFilter(field_name='completed', lookup_expr='exact')
-    
+    tags = django_filters.CharFilter(field_name='tags', lookup_expr='icontains', label='Tags contains')
+
     order_by = django_filters.OrderingFilter(
         fields=(
             ('created_at', 'created_at'),

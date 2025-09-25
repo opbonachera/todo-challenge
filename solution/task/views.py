@@ -18,18 +18,22 @@ class TaskViewSet(viewsets.ModelViewSet):
     ordering = ['-created_at']
     serializer_class = TaskSerializer
     
+    def get_queryset(self):
+        user = self.request.user
+        return Task.objects.filter(created_by=user)
+    
     def list(self, request, *args, **kwargs):
-        username = request.user.username
-        queryset = self.get_queryset().filter(created_by__username=username)
-
+        queryset = self.get_queryset().filter()
         serializer = self.get_serializer(queryset, many=True)
+        logger.info(f'Listed {len(serializer.data)} with filters: {request.query_params}')
         return Response(serializer.data)
 
 
     def retrieve(self, request, *args, **kwargs):
         task = self.get_object()
         serializer = self.get_serializer(task)
-        logger.info(f'Retrieved task: {task}')
+
+        logger.info(f'Retrieved task with id: {task.id}')
         return Response(serializer.data)
     
     def create(self, request, *args, **kwargs):
@@ -37,7 +41,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(created_by=request.user)
 
-        logger.info(f'Created task: {serializer.data}')
+        logger.info(f'Created task with id: {serializer.data["id"]}')
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 
@@ -49,7 +53,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         serializer.validated_data['updated_at'] = datetime.now()
         serializer.save()
 
-        logger.info(f'Updated task. Old data: {task}. New data: {serializer.data}')
+        logger.info(f'Updated task with id {task.id}.')
         return Response(serializer.data)
         
     def partial_update(self, request, *args, **kwargs):
@@ -59,7 +63,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        logger.info(f'Partially updated task. Old data: {task}. New data: {serializer.data}')
+        logger.info(f'Partially updated task with id {task.id}.')
         return Response(serializer.data)
     
     def destroy(self, request, *args, **kwargs):
