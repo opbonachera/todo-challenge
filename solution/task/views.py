@@ -18,10 +18,11 @@ class TaskViewSet(viewsets.ModelViewSet):
     ordering = ['-created_at']
     serializer_class = TaskSerializer
     
-    def list(self, request, *args, **kwargs):    
-        queryset = self.filter_queryset(self.get_queryset())
+    def list(self, request, *args, **kwargs):
+        username = request.user.username
+        queryset = self.get_queryset().filter(created_by__username=username)
+
         serializer = self.get_serializer(queryset, many=True)
-        logger.info(f'Listed {serializer.data} with filters: {request.query_params}')
         return Response(serializer.data)
 
 
@@ -35,7 +36,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(created_by=request.user)
-        
+
         logger.info(f'Created task: {serializer.data}')
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
