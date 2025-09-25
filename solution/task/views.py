@@ -22,7 +22,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         try:
             queryset = self.filter_queryset(self.get_queryset())
             serializer = self.get_serializer(queryset, many=True)
-            logger.info(f'Listed {len(serializer.data)} task(s) with filters: {request.query_params}')
+            logger.info(f'Listed {serializer.data} with filters: {request.query_params}')
             return Response(serializer.data)
         except Exception as e:
             logger.exception(f"Error in listing tasks: {e}")
@@ -32,7 +32,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         try:
             task = self.get_object()
             serializer = self.get_serializer(task)
-            logger.info(f'Retrieved task with id {task.id}')
+            logger.info(f'Retrieved task: {task}')
             return Response(serializer.data)
         except Exception as e:
             logger.exception(f"Error in retrieving task: {e}")
@@ -43,7 +43,7 @@ class TaskViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save(user=request.user)
-            logger.info(f'Created task with id {serializer.data.get("id")}')
+            logger.info(f'Created task: {serializer.data}')
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:
             logger.exception(f"Error in creating task: {e}")
@@ -53,10 +53,12 @@ class TaskViewSet(viewsets.ModelViewSet):
         try:
             task = self.get_object()
             serializer = self.get_serializer(task, data=request.data)
+            
             serializer.is_valid(raise_exception=True)
-            serializer["data"].get("updated_at") = datetime.now()
+            serializer.validated_data['updated_at'] = datetime.now()
             serializer.save()
-            logger.info(f'Updated task with id {task.id}')
+
+            logger.info(f'Updated task. Old data: {task}. New data: {serializer.data}')
             return Response(serializer.data)
         except Exception as e:
             logger.exception(f"Error in updating task: {e}")
@@ -66,9 +68,12 @@ class TaskViewSet(viewsets.ModelViewSet):
         try:
             task = self.get_object()
             serializer = self.get_serializer(task, data=request.data, partial=True)
+
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            logger.info(f'Partially updated task with id {task.id}')
+            
+            logger.info(f'Partially updated task. Old data: {task}. New data: {serializer.data}')
+            
             return Response(serializer.data)
         except Exception as e:
             logger.exception(f"Error in partial update of task: {e}")
@@ -77,8 +82,10 @@ class TaskViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         try:
             task = self.get_object()
+            
             task.deleted = True
             task.save()
+            
             logger.info(f'Soft deleted task with id {task.id}')
             return Response({"message": f"deleted task with id {task.id}"}, status=status.HTTP_200_OK)
         except Exception as e:
