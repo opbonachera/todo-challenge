@@ -38,12 +38,6 @@ cd todo-challenge
 ```bash 
 docker-compose up
 ```
-
-## Migraciones
-### 1. Aplicá las migraciones:
-```bash
-docker-compose exec -it <container-id> python manage.py migrate
-```
 ## Variables de entorno
 Para correr el proyecto, tenés que agregar en tu archivo .env las siguientes variables de entorno:
 
@@ -122,36 +116,36 @@ Todas las solicitudes deben incluir el encabezado `Authorization` con un token v
 ```
 - Priority: Soporta exact, gte o lte. 
 ```http
-  GET /api/task?priority=2
-  GET /api/task?priority__gte=1&priority__lte=3
+  GET /api/v1/task?priority=2
+  GET /api/v1/task?priority__gte=1&priority__lte=3
 ```
 - Title / Description: búsquedas parciales y exactas.
 icontains: contiene (insensible a mayúsculas).
 startswith / endswith: empieza o termina con.
 ```http
-  GET /api/task?title__icontains=plan
-  GET /api/task?description__startswith=Urgente
+  GET /api/v1/task?title__icontains=plan
+  GET /api/v1/task?description__startswith=Urgente
 ```
 - Tags: buscar tareas que contengan un tag específico dentro de la lista de tags.
 ```http
-  GET /api/task?tags__icontains=backend
+  GET /api/v1/task?tags__icontains=backend
 ```
 - Completed: estado de finalización (true/false)
 ```http
-  GET /api/task?completed=true
+  GET /api/v1/task?completed=true
 ```
 - Fecha de creación: Permite filtrar por fecha exacta (YYYY-MM-DD), devolviendo todas las tareas creadas en ese día.
 También acepta filtros de rango (gte, lte) con fechas.
 ```http
-  GET /api/tasks?created_at=2025-09-26
-  GET /api/tasks?created_at__gte=2025-09-20&created_at__lte=2025-09-26
+  GET /api/v1/tasks?created_at=2025-09-26
+  GET /api/v1/tasks?created_at__gte=2025-09-20&created_at__lte=2025-09-26
 ```
 - Si se envía un datetime completo (YYYY-MM-DDTHH:MM:SSZ), se realizará la comparación exacta contra la marca de tiempo.
 
 - Fecha de actualización: Filtrar por rango de actualización usando gte y lte.
 ```http
-  GET /api/tasks?updated_at__gte=2025-09-01
-  GET /api/tasks?updated_at__lte=2025-09-26
+  GET /api/v1/tasks?updated_at__gte=2025-09-01
+  GET /api/v1/tasks?updated_at__lte=2025-09-26
 ```
 ------
 #### Crear tarea
