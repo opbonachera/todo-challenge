@@ -6,7 +6,7 @@ env = environ.Env(
     DEBUG=(bool, False)  
 )
 
-CORS_ALLOW_ALL_ORIGINS = env()("CORS_ALLOW_ALL_ORIGINS", default=False)
+CORS_ALLOW_ALL_ORIGINS = env("CORS_ALLOW_ALL_ORIGINS", default=False)
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(BASE_DIR / ".env")
 API_VERSION = 'v1'
@@ -37,6 +37,7 @@ MIDDLEWARE = MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware', 
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -60,6 +61,7 @@ DATABASES = {
         'NAME': BASE_DIR / env("DB_NAME") if env("DB_ENGINE") == "django.db.backends.sqlite3" else env("DB_NAME"),
     }
 }
+CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 AUTH_PASSWORD_VALIDATORS = [
     # {
     #     "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
