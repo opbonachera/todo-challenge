@@ -3,7 +3,10 @@ from .models import Task
 
 class TaskSerializer(serializers.ModelSerializer):
     created_by = serializers.StringRelatedField(read_only=True)
+    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
     class Meta:
         model = Task
         db_table = 'task'
-        fields = ['id', 'title', 'completed', 'created_at', 'priority', 'description', 'updated_at', 'tags', 'created_by']
+        fields = ['id', 'title', 'completed',
+                  'created_at', 'priority', 'description',
+                  'updated_at', 'tags', 'created_by']
