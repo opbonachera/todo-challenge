@@ -64,11 +64,6 @@ Para mayor referencia, mirá el archivo env-sample.
 | `first_name`   | `string` | **Opcional**.  |
 | `last_name`   | `string` | **Opcional**. |
 
-#### Logout
-```http
-  POST /api/v1/logout
-```
-
 #### Login
 ```http
   POST /api/v1/login
@@ -79,17 +74,12 @@ Para mayor referencia, mirá el archivo env-sample.
 | `username`   | `string` | **Requerido**. |
 | `password`   | `string` | **Requerido**. |
 
-Devolverá refresh y access token. 
+Devolverá access token.
 
-#### Regenerar token
+#### Logout
 ```http
-  POST /api/v1/token/refresh
+  POST /api/v1/logout
 ```
-[Request BODY en formato JSON]
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `refresh`   | `string` | **Requerido**. |
-
 
 ### Módulo de tareas
 Todas las solicitudes deben incluir el encabezado `Authorization` con un token válido, con el formato:
