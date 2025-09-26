@@ -12,9 +12,9 @@ Ofrece autenticación con JWT, despliegue con Docker, logs y tests. Base de dato
 - Flexibilidad de filtrado aprovechando Django Filters tanto para consultas exactas como aproximadas.
 - Logs completos útiles para asegurar la observabilidad de la aplicación. 
 - Pruebas unitarias e integrales.
-- Respuestas homogéneas de la API utilizando drf-standardized-errors.
-## Requisitos previos
+- Respuestas homogéneas utilizando drf-standardized-errors.
 
+## Requisitos previos
 Este proyecto utiliza **Docker** y **Docker Compose** para simplificar la instalación y ejecución del entorno de desarrollo.
 
 - [Docker](https://docs.docker.com/get-docker/)
@@ -79,14 +79,16 @@ Para mayor referencia, mirá el archivo env-sample.
 | `username`   | `string` | **Requerido**. |
 | `password`   | `string` | **Requerido**. |
 
+Devolverá refresh y access token. 
+
 #### Regenerar token
 ```http
-  POST /api/v1/refresh-token
+  POST /api/v1/token/refresh
 ```
 [Request BODY en formato JSON]
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `token`   | `string` | **Requerido**. |
+| `refresh`   | `string` | **Requerido**. |
 
 
 ### Módulo de tareas
@@ -189,8 +191,18 @@ También acepta filtros de rango (gte, lte) con fechas.
 | `priority`   | `string` | **Opcional** Rango del 1 al 5. |
 | `tags`   | `string` | **Opcional**. Formato "tag1,tag2,tag3" |
 
+## Ejecutar tests
+Verificar que el contenedor esté corriendo:
+```bash
+  docker ps
+```
+Una vez verificado, ejecutar:
+```bash
+  docker exec -it <container-id> python manage.py test task
+```
+Los tests prueban el modelo de la tarea y los endpoints de la API. 
+
 ## Base de datos
----
 El proyecto utiliza SQLite3 como base de datos, montada en un volumen local (./db.sqlite3:/app/db.sqlite3) para garantizar persistencia fuera del contenedor. Esto simplifica la ejecución y evita perder datos al reiniciar.
 
 En un entorno real de producción se reemplazaría por PostgreSQL o MySQL en un contenedor independiente, pero para un proyecto de evaluación y simplicidad se optó por SQLite.
