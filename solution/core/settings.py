@@ -6,6 +6,7 @@ env = environ.Env(
     DEBUG=(bool, False)  
 )
 
+CORS_ALLOW_ALL_ORIGINS = env()("CORS_ALLOW_ALL_ORIGINS", default=False)
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(BASE_DIR / ".env")
 API_VERSION = 'v1'
@@ -25,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'drf_standardized_errors',
     'rest_framework.authtoken',
+    'corsheaders',
     'django.contrib.auth',
     'core',
     'task',
