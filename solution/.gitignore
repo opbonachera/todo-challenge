@@ -4,3 +4,4 @@ notas.txt
 */__pycache__/
 db.sqlite3
 logs/
+.pytest
